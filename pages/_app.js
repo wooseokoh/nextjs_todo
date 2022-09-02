@@ -5,6 +5,8 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
+import { RecoilRoot } from "recoil";
+import { useSsrComplectedState } from "../states";
 import Head from "next/head";
 import PropTypes from "prop-types";
 import * as React from "react";
@@ -53,7 +55,11 @@ export default function MyApp(props) {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <LocalizationProvider dateAdapter={AdapterMoment}>
-          <Component {...pageProps} />
+          <RecoilRoot>
+            <MyAppInner>
+              <Component {...pageProps} />
+            </MyAppInner>
+          </RecoilRoot>
         </LocalizationProvider>
       </ThemeProvider>
     </CacheProvider>
@@ -65,3 +71,10 @@ MyApp.propTypes = {
   emotionCache: PropTypes.object,
   pageProps: PropTypes.object.isRequired,
 };
+
+function MyAppInner({ children }) {
+  const setSsrCompleted = useSsrComplectedState();
+  React.useEffect(setSsrCompleted, []);
+
+  return children;
+}
