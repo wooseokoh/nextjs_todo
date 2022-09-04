@@ -3,10 +3,11 @@ import "../styles/globals.css";
 import { CacheProvider } from "@emotion/react";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { LocalizationProvider } from "@mui/x-date-pickers";
+import { Alert, Snackbar } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
-import { RecoilRoot } from "recoil";
-import { useSsrComplectedState } from "../states";
+import { RecoilRoot, useRecoilState } from "recoil";
+import { Common__notiSnackBarAtom, useSsrComplectedState } from "../states";
 import Head from "next/head";
 import PropTypes from "prop-types";
 import * as React from "react";
@@ -76,5 +77,22 @@ function MyAppInner({ children }) {
   const setSsrCompleted = useSsrComplectedState();
   React.useEffect(setSsrCompleted, []);
 
-  return children;
+  const [notiSnackBar, setNotiSnackBar] = useRecoilState(
+    Common__notiSnackBarAtom
+  );
+
+  return (
+    <>
+      <Snackbar
+        open={notiSnackBar.open}
+        autoHideDuration={6000}
+        onClose={() => setNotiSnackBar({ ...notiSnackBar, open: false })}
+      >
+        <Alert severity={notiSnackBar.severity} sx={{ width: "100%" }}>
+          {notiSnackBar.msg}
+        </Alert>
+      </Snackbar>
+      {children}
+    </>
+  );
 }

@@ -8,11 +8,15 @@ import { useRouter } from "next/router";
 import {
   TodoWrite__bodyInputValueAtom,
   TodoWrite__performDateInputValueAtom,
+  Common__notiSnackBarAtom,
 } from "../states";
 import { momentToFormat2 } from "../utils";
 
 export default function Home() {
   const router = useRouter();
+  const [notiSnackBar, setNotiSnackBar] = useRecoilState(
+    Common__notiSnackBarAtom
+  );
   const { writeTodo } = useTodosState();
   const [performDateInputValue, setPerformDateInputValue] = useRecoilState(
     TodoWrite__performDateInputValueAtom
@@ -37,6 +41,12 @@ export default function Home() {
 
     setPerformDateInputValue(null);
     setBodyInputValue("");
+
+    setNotiSnackBar({
+      open: true,
+      msg: "할일이 작성되었습니다.",
+      severity: "success",
+    });
 
     router.replace("/");
   };
