@@ -4,6 +4,7 @@ import Head from "next/head";
 import Link from "../src/Link";
 import { useRecoilState } from "recoil";
 import { useTodosState } from "../hooks";
+import { useRouter } from "next/router";
 import {
   TodoWrite__bodyInputValueAtom,
   TodoWrite__performDateInputValueAtom,
@@ -11,6 +12,7 @@ import {
 import { momentToFormat2 } from "../utils";
 
 export default function Home() {
+  const router = useRouter();
   const { writeTodo } = useTodosState();
   const [performDateInputValue, setPerformDateInputValue] = useRecoilState(
     TodoWrite__performDateInputValueAtom
@@ -21,12 +23,12 @@ export default function Home() {
   );
 
   const onSubmit = () => {
-    if (performDateInputValue.trim().length == 0) {
+    if (!performDateInputValue || performDateInputValue.trim().length == 0) {
       alert("언제 해야하는 일인지 날짜를 적어주세요.");
       return;
     }
 
-    if (bodyInputValue.trim().length == 0) {
+    if (!bodyInputValue || bodyInputValue.trim().length == 0) {
       alert("할일 내용을 입력해주세요.");
       return;
     }
@@ -35,6 +37,8 @@ export default function Home() {
 
     setPerformDateInputValue(null);
     setBodyInputValue("");
+
+    router.replace("/");
   };
 
   return (
