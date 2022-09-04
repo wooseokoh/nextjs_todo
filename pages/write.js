@@ -3,6 +3,7 @@ import { AppBar, Button, Toolbar, TextField } from "@mui/material";
 import Head from "next/head";
 import Link from "../src/Link";
 import { useRecoilState } from "recoil";
+import { useTodosState } from "../hooks";
 import {
   TodoWrite__bodyInputValueAtom,
   TodoWrite__performDateInputValueAtom,
@@ -10,6 +11,7 @@ import {
 import { momentToFormat2 } from "../utils";
 
 export default function Home() {
+  const { writeTodo } = useTodosState();
   const [performDateInputValue, setPerformDateInputValue] = useRecoilState(
     TodoWrite__performDateInputValueAtom
   );
@@ -18,7 +20,7 @@ export default function Home() {
     TodoWrite__bodyInputValueAtom
   );
 
-  const submit = () => {
+  const onSubmit = () => {
     if (performDateInputValue.trim().length == 0) {
       alert("언제 해야하는 일인지 날짜를 적어주세요.");
       return;
@@ -28,6 +30,11 @@ export default function Home() {
       alert("할일 내용을 입력해주세요.");
       return;
     }
+
+    writeTodo(performDateInputValue.trim(), bodyInputValue.trim());
+
+    setPerformDateInputValue(null);
+    setBodyInputValue("");
   };
 
   return (
@@ -73,7 +80,7 @@ export default function Home() {
           value={bodyInputValue}
           onChange={({ target: { value } }) => setBodyInputValue(value)}
         />
-        <Button variant='contained'>
+        <Button variant='contained' onClick={onSubmit}>
           <span>할일추가</span>
           <span>&nbsp;</span>
           <i className='fa-solid fa-marker'></i>
