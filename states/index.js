@@ -62,5 +62,6 @@ export const Common__notiSnackBarAtom = atom({
     open: false,
     msg: "",
     severity: "",
+    severity: "success",
   },
 });
