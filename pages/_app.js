@@ -7,6 +7,7 @@ import { Alert, Snackbar } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import { RecoilRoot, useRecoilState } from "recoil";
+import { useRouter } from "next/router";
 import { Common__notiSnackBarAtom, useSsrComplectedState } from "../states";
 import Head from "next/head";
 import PropTypes from "prop-types";
@@ -74,12 +75,23 @@ MyApp.propTypes = {
 };
 
 function MyAppInner({ children }) {
-  const setSsrCompleted = useSsrComplectedState();
-  React.useEffect(setSsrCompleted, []);
+  const router = useRouter();
 
   const [notiSnackBar, setNotiSnackBar] = useRecoilState(
     Common__notiSnackBarAtom
   );
+
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    if (router.isReady) {
+      setLoading(false);
+    }
+  }, [router.isReady]);
+
+  if (loading) {
+    return <>로딩중...</>;
+  }
 
   return (
     <>
