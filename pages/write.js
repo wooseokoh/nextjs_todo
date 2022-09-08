@@ -61,11 +61,15 @@ export default function Home() {
 
       <AppBar position='fixed'>
         <Toolbar>
-          <div className='flex-1'></div>
           <Link href='/' noLinkStyle className='font-bold'>
             HAPPY NOTE
           </Link>
-          <div className='flex-1 flex justify-end'></div>
+          <div className='flex-1'></div>
+          <div className='flex self-stretch '>
+            <Button color='inherit' href='/' noLinkStyle component={Link}>
+              다음에 할래요.
+            </Button>
+          </div>
         </Toolbar>
       </AppBar>
       <Toolbar />
@@ -79,7 +83,7 @@ export default function Home() {
           inputFormat={"yyyy-MM-DD"}
           mask={"____-__-__"}
           renderInput={(params) => <TextField {...params} />}
-          toolbarFormat='yyyy년 MM월'
+          toolbarFormat='yyyy. MM'
           okText='확인'
           cancelText='취소'
         />
@@ -88,8 +92,8 @@ export default function Home() {
           className='flex-1 flex flex-col'
           InputProps={{ className: " flex-1 flex flex-col" }}
           inputProps={{ className: " flex-1" }}
-          label='할일'
-          placeholder='할일'
+          label='무엇을 해야 하나요?'
+          placeholder='무엇을 해야 하나요?'
           multiline
           value={bodyInputValue}
           onChange={({ target: { value } }) => setBodyInputValue(value)}
